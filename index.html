@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Aguantás un vivo? · Ezra</title>
+<meta name="description" content="Un minuto vendiendo ropa en vivo, sola. Te escriben, te pagan y te preguntan, todo a la vez. ¿Cuánto aguantás?">
+<meta name="theme-color" content="#fbfaf8">
+<link rel="canonical" href="https://botezra63-cyber.github.io/aguantas-un-vivo/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="¿Aguantás un vivo?">
+<meta property="og:description" content="Un minuto vendiendo ropa en vivo, sola. Te escriben, te pagan y te preguntan, todo a la vez.">
+<meta property="og:url" content="https://botezra63-cyber.github.io/aguantas-un-vivo/">
+<meta property="og:image" content="https://botezra63-cyber.github.io/aguantas-un-vivo/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="¿Aguantás un vivo?">
+<meta name="twitter:description" content="Un minuto vendiendo ropa en vivo, sola. ¿Cuánto aguantás?">
+<meta name="twitter:image" content="https://botezra63-cyber.github.io/aguantas-un-vivo/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fuentes/host-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<a class="marca" href="https://botezra.com/?utm_source=juego&amp;utm_medium=social&amp;utm_campaign=aguantas_un_vivo" target="_blank" rel="noopener">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1f1b4d"/><g transform="translate(4.5 7) scale(0.6)"><path d="M4 26 14 6h6L10 26z" fill="#8b7cf6"/><path d="M15 26 25 6h6L21 26z" fill="#b3a8f9"/><path d="M26 26 32 14h5l-6 12z" fill="#e4e0fd"/></g></svg>
+  Ezra
+</a>
+
+<main class="tel" id="tel">
+
+  <!-- 1 · Inicio -->
+  <section class="pantalla claro" id="inicio">
+    <div class="ini-foto">
+      <img src="media/vivo.jpg" alt="" width="404" height="718">
+      <span class="pill-vivo">EN VIVO</span>
+      <ul class="ini-chat" aria-hidden="true">
+        <li><b>mabe.gomez</b> YO la M 🙋</li>
+        <li><b>caro.22</b> ya te transferí 💸</li>
+        <li><b>luu_fer</b> cuánto te debo??</li>
+      </ul>
+    </div>
+    <div class="ini-texto">
+      <h1>¿Aguantás un vivo?</h1>
+      <p class="bajada">Sos Lola. Vendés ropa en vivo. Te escriben, te pagan y te preguntan, todo a la vez. Y estás sola.</p>
+      <ul class="reglas">
+        <li><span class="r-chip r-yo">YO 🙋</span> Tocalo para anotar la venta.</li>
+        <li><span class="r-chip r-plata">💸</span> Tocá la transferencia y elegí de quién es.</li>
+        <li><span class="r-chip r-preg">¿Cuánto debo?</span> Tocalo y contestá. Te ocupa las manos.</li>
+      </ul>
+      <button class="btn btn-1" id="empezar">Empezar el vivo</button>
+      <button class="btn-sonido" id="sonido" aria-pressed="true">🔊 Con sonido</button>
+    </div>
+  </section>
+
+  <!-- 2 · El vivo -->
+  <section class="pantalla vivo" id="juego" hidden>
+    <video id="vid" src="media/vivo.mp4" poster="media/vivo.jpg" muted playsinline loop preload="auto"></video>
+    <div class="vivo-sombra"></div>
+
+    <header class="vivo-top">
+      <div class="vivo-cuenta">
+        <img src="media/vivo.jpg" alt="">
+        <div><b>lola.showroom</b><span id="mirando">312 mirando</span></div>
+        <span class="pill-vivo">EN VIVO</span>
+      </div>
+      <div class="vivo-der">
+        <div class="reloj" id="reloj">1:00</div>
+        <div class="vidas" id="vidas" aria-label="Paciencia de las clientas"></div>
+      </div>
+    </header>
+
+    <div class="prenda" id="prenda"></div>
+    <div class="banners" id="banners"></div>
+    <div class="ezra-zona" id="ezra" hidden></div>
+    <ul class="chat" id="chat"></ul>
+
+    <button class="otra-prenda" id="otra-prenda" hidden>👗<span>Otra prenda</span></button>
+
+    <footer class="hud">
+      <div><small>Vendido</small><b id="hud-vendido">$0</b></div>
+      <div class="hud-mal" id="hud-der"><small id="hud-der-t">Se te escapó</small><b id="hud-der-n">$0</b></div>
+    </footer>
+
+    <div class="ocupada" id="ocupada" hidden>
+      <div class="ocupada-caja"><span id="ocupada-t">Anotando…</span><i id="ocupada-barra"></i></div>
+    </div>
+
+    <div class="elegir" id="elegir" hidden>
+      <div class="elegir-caja">
+        <p class="elegir-t">¿De quién es esta plata?</p>
+        <p class="elegir-d" id="elegir-d"></p>
+        <div class="elegir-ops" id="elegir-ops"></div>
+        <i class="elegir-barra" id="elegir-barra"></i>
+      </div>
+    </div>
+
+    <div class="cartel" id="cartel" hidden></div>
+    <div class="toast" id="toast"></div>
+    <div class="golpe" id="golpe"></div>
+  </section>
+
+  <!-- 3 · Resultado sola -->
+  <section class="pantalla claro" id="res1" hidden>
+    <div class="res">
+      <p class="res-kicker" id="r1-kicker">Aguantaste</p>
+      <p class="res-grande" id="r1-seg">34 segundos</p>
+      <p class="res-escapo">Se te escaparon <b id="r1-escapo">$0</b></p>
+      <ul class="res-lista" id="r1-lista"></ul>
+      <p class="res-frase" id="r1-frase"></p>
+      <button class="btn btn-1" id="con-ezra">Ahora jugalo con Ezra →</button>
+      <div class="fila-btn">
+        <button class="btn btn-2" data-compartir>Compartir</button>
+        <button class="btn btn-2" id="otra-vez-1">Reintentar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Final -->
+  <section class="pantalla claro" id="final" hidden>
+    <div class="res">
+      <p class="res-kicker">Mismo vivo. Otra noche.</p>
+      <div class="compara">
+        <div class="comp sola">
+          <small>Sola</small>
+          <b id="f-sola-escapo">$0</b>
+          <span>se te escaparon</span>
+          <span class="comp-n" id="f-sola-n"></span>
+        </div>
+        <div class="comp con">
+          <small>Con Ezra</small>
+          <b>$0</b>
+          <span>se te escapó</span>
+          <span class="comp-n" id="f-ezra-n"></span>
+        </div>
+      </div>
+      <h2>Vos vendé. Lo demás se ordena solo.</h2>
+      <p class="final-p">Ezra atiende el WhatsApp de tu negocio: cada transferencia va sola a su pedido y la clienta sabe al toque cuánto le falta. Aunque le pague el marido.</p>
+      <a class="btn btn-1" id="cta" href="https://botezra.com/ventas.html?utm_source=juego&amp;utm_medium=social&amp;utm_campaign=aguantas_un_vivo" target="_blank" rel="noopener">Probalo 7 días gratis</a>
+      <p class="final-chico">Sin tarjeta. Con tu número de WhatsApp de siempre.</p>
+      <div class="fila-btn">
+        <button class="btn btn-2" data-compartir>Compartir mi resultado</button>
+        <button class="btn btn-2" id="otra-vez-2">Jugar otra vez</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compartir (cuando el teléfono no tiene el menú propio) -->
+  <div class="hoja" id="hoja" hidden>
+    <div class="hoja-caja">
+      <p class="hoja-t">Compartir</p>
+      <p class="hoja-texto" id="hoja-texto"></p>
+      <a class="btn btn-wa" id="sh-wa" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn-x" id="sh-x" target="_blank" rel="noopener">X</a>
+      <button class="btn btn-2" id="sh-copiar">Copiar el link</button>
+      <button class="hoja-cerrar" id="hoja-cerrar">Cerrar</button>
+    </div>
+  </div>
+
+</main>
+
+<p class="pie">Un juego de <a href="https://botezra.com/?utm_source=juego&amp;utm_medium=social&amp;utm_campaign=aguantas_un_vivo" target="_blank" rel="noopener">Ezra</a>. Lola, sus clientas y sus pedidos son inventados.</p>
+
+<script src="juego.js"></script>
+</body>
+</html>
