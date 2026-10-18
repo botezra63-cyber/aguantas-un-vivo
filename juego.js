@@ -79,7 +79,7 @@ function reiniciar(modo) {
     vendido: 0, escapado: 0, contestadas: 0, msgsEzra: 0, pagosEzra: 0,
     st: { ventas: 0, ventasPlata: 0, sinDueno: 0, equivocada: 0, sinRespuesta: 0, noCuaderno: 0 },
     pedidos: [], vivos: [], colaEzra: [], tiktokSabido: new Set(),
-    prox: { ruido: 0.3, claim: 1.2, pago: modo === 'sola' ? 6 : 99, preg: modo === 'sola' ? 12 : 4, prenda: 13, ezra: 0 },
+    prox: { ruido: 0.4, claim: 1.5, pago: modo === 'sola' ? 8 : 99, preg: modo === 'sola' ? 15 : 5, prenda: 15, ezra: 0 },
     prenda: Math.floor(Math.random() * PRENDAS.length), nPedido: 1240 + Math.floor(Math.random() * 40), mirando: 280 + Math.floor(Math.random() * 60),
     ultimo: 0, finEn: null, prendaLibre: 0,
   });
@@ -167,15 +167,15 @@ function intensidad() { return J.modo === 'sola' ? J.t / 55 : 0.5 + (J.t / J.dur
 
 function paso() {
   const t = J.t, k = intensidad();
-  if (t >= J.prox.ruido) { ruido(); J.prox.ruido = t + rnd(0.45, 1.0) * lerp(1, 0.65, k); }
-  if (t >= J.prox.claim) { nuevoPedido(); J.prox.claim = t + rnd(0.8, 1.2) * lerp(2.3, 0.8, k); }
-  if (t >= J.prox.pago) { nuevoPago(); J.prox.pago = t + rnd(0.8, 1.2) * lerp(4.4, 1.6, k); }
-  if (t >= J.prox.preg) { nuevaPregunta(); J.prox.preg = t + rnd(0.8, 1.2) * lerp(6.5, 2.4, k); }
-  if (t >= J.prox.prenda) { otraPrenda(false); J.prox.prenda = t + 12; }
+  if (t >= J.prox.ruido) { ruido(); J.prox.ruido = t + rnd(0.9, 1.7) * lerp(1, 0.7, k); }
+  if (t >= J.prox.claim) { nuevoPedido(); J.prox.claim = t + rnd(0.8, 1.2) * lerp(3.4, 1.3, k); }
+  if (t >= J.prox.pago) { nuevoPago(); J.prox.pago = t + rnd(0.8, 1.2) * lerp(6, 2.6, k); }
+  if (t >= J.prox.preg) { nuevaPregunta(); J.prox.preg = t + rnd(0.8, 1.2) * lerp(8.5, 3.6, k); }
+  if (t >= J.prox.prenda) { otraPrenda(false); J.prox.prenda = t + 15; }
 
   if (J.modo === 'ezra') {
     for (const o of J.pedidos) if (o.pagoEn && t >= o.pagoEn) { o.pagoEn = null; ezraSena(o); }
-    if (J.colaEzra.length && t >= J.prox.ezra) { mostrarEzra(J.colaEzra.shift()); J.prox.ezra = t + (J.colaEzra.length > 3 ? 0.7 : 1.15); }
+    if (J.colaEzra.length && t >= J.prox.ezra) { mostrarEzra(J.colaEzra.shift()); J.prox.ezra = t + (J.colaEzra.length > 3 ? 1.1 : 1.6); }
   }
 
   for (const v of J.vivos.slice()) if (t >= v.vence) vencer(v);
@@ -250,13 +250,13 @@ function nuevoPedido() {
   J.pedidos.push(o);
   if (J.modo === 'sola') {
     const li = comentario(c.u, DICHO_YO(talle), 'activo claim', 'Anotar');
-    const v = { tipo: 'claim', o, el: li, vence: J.t + lerp(4.4, 3.2, intensidad()) };
+    const v = { tipo: 'claim', o, el: li, vence: J.t + lerp(6, 4.5, intensidad()) };
     li.style.setProperty('--dur', `${v.vence - J.t}s`);
     li.addEventListener('pointerdown', () => tocar(v));
     J.vivos.push(v);
   } else {
     comentario(c.u, DICHO_YO(talle), 'claim-ezra');
-    o.pagoEn = J.t + rnd(1.3, 3.2);
+    o.pagoEn = J.t + rnd(2, 4);
   }
 }
 
@@ -268,7 +268,7 @@ function nuevoPago() {
   const el = document.createElement('div');
   el.className = 'banner';
   poner(el, `<span class="b-ico">🏦</span><span class="b-txt"><small>Banco · Transferencia recibida</small><b>${plata(o.p.sena)}</b> de ${o.c.n}</span><span class="b-chip">¿De quién?</span>`);
-  const v = { tipo: 'pago', o, el, vence: J.t + lerp(4.8, 3.8, intensidad()) };
+  const v = { tipo: 'pago', o, el, vence: J.t + lerp(6.5, 5, intensidad()) };
   el.style.setProperty('--dur', `${v.vence - J.t}s`);
   el.addEventListener('pointerdown', () => tocar(v));
   const b = $('#banners'); b.appendChild(el);
@@ -282,7 +282,7 @@ function nuevaPregunta() {
   const o = pick(cand.slice(0, 4)); o.preguntado = true;
   if (J.modo === 'sola') {
     const li = comentario(o.c.u, pick(DICHO_PREG), 'activo preg', 'Contestar');
-    const v = { tipo: 'preg', o, el: li, vence: J.t + lerp(5.2, 4.2, intensidad()) };
+    const v = { tipo: 'preg', o, el: li, vence: J.t + lerp(7, 5.5, intensidad()) };
     li.style.setProperty('--dur', `${v.vence - J.t}s`);
     li.addEventListener('pointerdown', () => tocar(v));
     J.vivos.push(v);
@@ -349,7 +349,7 @@ function abrirEleccion(o) {
   poner($('#elegir-d'), `<b>${plata(o.p.sena)}</b> de <b>${o.c.n}</b>`);
   poner($('#elegir-ops'), ops.map((u) => `<button data-u="${u}">@${u}</button>`).join('') + '<button class="nose" data-u="">No sé 🤷</button>');
   for (const b of $('#elegir-ops').children) b.addEventListener('pointerdown', () => elegir(b.dataset.u));
-  const dur = 4.2;
+  const dur = 5.5;
   J.eligiendo = { o, vence: J.t + dur };
   const barra = $('#elegir-barra'); barra.style.setProperty('--dur', `${dur}s`);
   barra.style.animation = 'none'; void barra.offsetWidth; barra.style.animation = '';
@@ -404,7 +404,7 @@ function golpe() {
 let avisoT = null;
 function aviso(texto, tipo = '') {
   const el = $('#toast'); el.textContent = texto; el.className = `toast si ${tipo}`;
-  clearTimeout(avisoT); avisoT = setTimeout(() => { el.className = 'toast'; }, 1700);
+  clearTimeout(avisoT); avisoT = setTimeout(() => { el.className = 'toast'; }, 2200);
 }
 
 /* ── 2ª vuelta: Ezra contesta ───────────────────────────── */
@@ -435,7 +435,7 @@ function mostrarEzra(m) {
   zona.prepend(el);
   hud('d');
   [...zona.querySelectorAll('.ez')].slice(2).forEach((x) => { x.classList.add('sale'); setTimeout(() => x.remove(), 350); });
-  setTimeout(() => { el.classList.add('sale'); setTimeout(() => el.remove(), 350); }, 3200);
+  setTimeout(() => { el.classList.add('sale'); setTimeout(() => el.remove(), 350); }, 4200);
 }
 
 /* ── Fin de cada vuelta ─────────────────────────────────── */
@@ -540,7 +540,7 @@ $('#otra-vez-1').addEventListener('click', () => empezar('sola'));
 $('#otra-vez-2').addEventListener('click', () => empezar('sola'));
 $('#otra-prenda').addEventListener('pointerdown', () => {
   if (!J.corriendo || J.pausa || J.t < (J.prendaLibre || 0)) return;
-  J.prendaLibre = J.t + 1.8; otraPrenda(true); SND.tic();
+  J.prendaLibre = J.t + 2.5; otraPrenda(true); SND.tic();
 });
 for (const b of document.querySelectorAll('[data-compartir]')) b.addEventListener('click', compartir);
 $('#sh-copiar').addEventListener('click', copiar);
